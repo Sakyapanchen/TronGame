@@ -2,6 +2,7 @@
 /Intermediate/
 /Build/
 /DerivedDataCache/
+/Binaries/Android/
 /.vs/
 *.db
 *.opendb
