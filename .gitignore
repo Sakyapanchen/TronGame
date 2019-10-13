@@ -2,7 +2,13 @@
 /Intermediate/
 /Build/
 /DerivedDataCache/
-/Binaries/Android/
+
+Binaries/*
+!Binaries/Win64/
+*Binaries/Win64/*
+!Binaries/Win64/UE4Editor-Tron.dll
+!Binaries/Win64/UE4Editor.modules
+
 /.vs/
 *.db
 *.opendb
