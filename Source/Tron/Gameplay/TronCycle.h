@@ -19,11 +19,19 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	UFUNCTION(BlueprintNativeEvent, Category = "References")
+		void GetReferences(bool & Success);
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Settings|Movement", meta = (DisplayName = "Movement Speed", ClampMin = "0", UIMin = "0"))
+		float MovementSpeed = 100;
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Settings", meta = (DisplayName = "Trail Thickness", ClampMin = "1", UIMin = "1"))
+		float TrailThickness = 5;
 
 };
