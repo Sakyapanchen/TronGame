@@ -31,3 +31,8 @@ void ATronCycleLightTrail::Tick(float DeltaTime)
 
 }
 
+void ATronCycleLightTrail::SetActive(bool bActive)
+{
+	bIsActive = bActive;
+}
+

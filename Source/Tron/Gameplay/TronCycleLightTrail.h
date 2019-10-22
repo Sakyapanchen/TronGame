@@ -26,4 +26,11 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UFUNCTION(BlueprintCallable, Category = "Set Active")
+		void SetActive(bool bActive);
+
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Settings", meta = (DisplayName = "Is Active"))
+		bool bIsActive = true;
+
+
 };
