@@ -28,17 +28,24 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	UFUNCTION(BlueprintCallable, Category = "Movement", meta = (DisplayName = "Turn Right"))
 		void TurnRight();
 	UFUNCTION(BlueprintCallable, Category = "Movement", meta = (DisplayName = "Turn Left"))
 		void TurnLeft();
+	UFUNCTION(BlueprintCallable, Category = "Movement", meta = (DisplayName = "Enable Movement"))
+		void EnableMovement(bool bEnabled);
 	UFUNCTION(BlueprintPure, Category = "Movement", meta = (DisplayName = "Get Cycle Trails"))
 		void GetCycleTrails(TArray<class ATronCycleLightTrail *> & trails);
+	UFUNCTION(BlueprintCallable, Category = "Game", meta = (DisplayName = "Clear Trails"))
+		void ClearTrails();
+	UFUNCTION(BlueprintPure, Category = "Movement", meta = (DisplayName = "Get Trail Source Point"))
+		void GetTrailSourcePoint(FVector & point);
 
 	FORCEINLINE class USphereComponent* GetSphereComponent() const { return SphereComponent; }
-	FORCEINLINE class USceneComponent* GetTrailSource() const { return TrailSource; }
 
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Settings|Movement", meta = (DisplayName = "Movement Speed", ClampMin = "0", UIMin = "0"))
 		float MovementSpeed = 100;
@@ -46,22 +53,24 @@ public:
 		float TrailThickness = 5;
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Settings", meta = (DisplayName = "Light Trail Class"))
 		TSubclassOf<class ATronCycleLightTrail> LightTrailClass;
-
-
-		
-
+	UPROPERTY(BlueprintReadOnly, Category = "Movement", meta = (DisplayName = "Is Movement"))
+		bool bIsMovement = false;
+	UPROPERTY(BlueprintReadOnly, Category = "Game", meta = (DisplayName = "Player ID"))
+		int32 PlayerID = -1;
 
 private:
 
 	UPROPERTY(Category = TronCycle, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 		class USphereComponent * SphereComponent;
-	UPROPERTY(Category = TronCycle, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-		class USceneComponent * TrailSource;
 
 	UFUNCTION(NetMulticast, Reliable)
 		void NetMulticast_TurnRight(FVector turnPoint);
 	UFUNCTION(NetMulticast, Reliable)
 		void NetMulticast_TurnLeft(FVector turnPoint);
+	UFUNCTION(NetMulticast, Reliable)
+		void NetMulticast_EnableMovement(bool bEnabled);
+	UFUNCTION(NetMulticast, Reliable)
+		void NetMulticast_PlayerIdRecieved(int32 inPlayerId);
 
 	UFUNCTION(Server, Reliable, WithValidation)
 		void Server_TurnRight(FVector turnPoint);
@@ -71,6 +80,7 @@ private:
 
 	void SpawnLightTrail();
 	void CycleMovement();
+	void TryGetPlayerId();
 	void TurnCycle(bool bRight, FVector turnPoint);
 
 	TArray<class ATronCycleLightTrail *> CycleTrails;

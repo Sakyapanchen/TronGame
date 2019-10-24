@@ -23,6 +23,9 @@ public:
 	UPROPERTY(BlueprintReadOnly, Category = "Game")
 		int32 NumPlayersToStartMatch = -1;
 
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Settings", meta = (DisplayName = "Match Start Timeout", ClampMin = "0", UIMin = "0"))
+		float MatchStartTimeout = 2;
+
 	UPROPERTY(BlueprintReadOnly, Category = "Game")
 		bool bReadyToStartMatch;
 
@@ -30,7 +33,18 @@ public:
 	TArray<APlayerController *> Players;
 
 	virtual void HandleStartingNewPlayer_Implementation(APlayerController* NewPlayer) override;
-	virtual void StartPlay() override;
-	virtual void StartMatch() override;
 
+protected:
+
+	virtual void BeginPlay() override;
+
+	UFUNCTION(BlueprintNativeEvent, Category = "References")
+		void GetReferences(bool & Success);
+
+private:
+
+	void UpdateControllersList();
+	void OnMatchStartTimeoutEnded();
+	TArray<class AActor *> PlayerStarts;	
+	FTimerHandle StartCountdown;
 };
