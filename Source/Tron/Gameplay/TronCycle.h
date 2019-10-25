@@ -8,6 +8,9 @@
 #include "Runtime/Engine/Classes/Engine/NetSerialization.h"
 #include "TronCycle.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FCycleCrashResult, ATronCycle *, Cycle);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FCycleTurnResult, ATronCycle *, Cycle, bool, bRight);
+
 UCLASS()
 class TRON_API ATronCycle : public APawn
 {
@@ -42,6 +45,8 @@ public:
 		void GetCycleTrails(TArray<class ATronCycleLightTrail *> & trails);
 	UFUNCTION(BlueprintCallable, Category = "Game", meta = (DisplayName = "Clear Trails"))
 		void ClearTrails();
+	UFUNCTION(BlueprintCallable, Category = "Game", meta = (DisplayName = "Cycle Crash Check"))
+		void CycleCrashCheck(AActor * actor);
 	UFUNCTION(BlueprintPure, Category = "Movement", meta = (DisplayName = "Get Trail Source Point"))
 		void GetTrailSourcePoint(FVector & point);
 
@@ -55,8 +60,15 @@ public:
 		TSubclassOf<class ATronCycleLightTrail> LightTrailClass;
 	UPROPERTY(BlueprintReadOnly, Category = "Movement", meta = (DisplayName = "Is Movement"))
 		bool bIsMovement = false;
+	UPROPERTY(BlueprintReadOnly, Category = "Game", meta = (DisplayName = "Is Crashed"))
+		bool bIsCrashed = false;
 	UPROPERTY(BlueprintReadOnly, Category = "Game", meta = (DisplayName = "Player ID"))
 		int32 PlayerID = -1;
+
+	UPROPERTY(BlueprintAssignable, Category = "Game", meta = (DisplayName = "On Cycle Crash"))
+		FCycleCrashResult OnCycleCrash;
+	UPROPERTY(BlueprintAssignable, Category = "Game", meta = (DisplayName = "On Cycle Turn"))
+		FCycleTurnResult OnCycleTurn;
 
 private:
 

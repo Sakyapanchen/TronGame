@@ -40,17 +40,8 @@ void ATronGameMode::BeginPlay()
 	Super::BeginPlay();
 }
 
-void ATronGameMode::UpdateControllersList()
+void ATronGameMode::CheckWinConditions()
 {
-	TArray<AActor *> findedActors;
-	Players.Empty();
-	UGameplayStatics::GetAllActorsOfClass(this, APlayerController::StaticClass(), findedActors);
-	for (AActor * currentActor : findedActors)
-	{
-		APlayerController * currentController = Cast<APlayerController>(currentActor);
-		if (currentController)
-			Players.AddUnique(currentController);
-	}
 }
 
 void ATronGameMode::OnMatchStartTimeoutEnded()

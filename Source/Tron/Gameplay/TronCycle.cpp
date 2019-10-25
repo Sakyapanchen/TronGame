@@ -101,6 +101,10 @@ void ATronCycle::ClearTrails()
 	CycleTrails.Empty();
 }
 
+void ATronCycle::CycleCrashCheck(AActor * actor)
+{
+}
+
 void ATronCycle::GetTrailSourcePoint(FVector & point)
 {
 	point = (GetActorForwardVector() * -1 * SphereComponent->GetScaledSphereRadius()) + GetActorLocation();
@@ -200,5 +204,6 @@ void ATronCycle::TurnCycle(bool bRight, FVector turnPoint)
 	FHitResult * hitResult = nullptr;
 	SetActorLocation(turnPoint, false, hitResult, ETeleportType::TeleportPhysics);
 	AddActorWorldRotation(deltaRotation, false, hitResult, ETeleportType::TeleportPhysics);
+	OnCycleTurn.Broadcast(this, bRight);
 	SpawnLightTrail();
 }

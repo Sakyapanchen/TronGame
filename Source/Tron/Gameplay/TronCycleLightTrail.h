@@ -15,15 +15,6 @@ public:
 	// Sets default values for this actor's properties
 	ATronCycleLightTrail();
 
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-	UFUNCTION(BlueprintNativeEvent, Category = "References")
-		void GetReferences(bool & Success);
-
-public:	
-	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION(BlueprintCallable, Category = "Set Active")
@@ -31,6 +22,26 @@ public:
 
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Settings", meta = (DisplayName = "Is Active"))
 		bool bIsActive = true;
+	UPROPERTY(BlueprintReadOnly, Category = "References", meta = (DisplayName = "Owner Cycle"))
+		class ATronCycle * OwnerCycle;
+	UPROPERTY(BlueprintReadOnly, Category = "References", meta = (DisplayName = "Game State"))
+		class ATronGameState * GameState;
+	UPROPERTY(BlueprintReadOnly, Category = "Game", meta = (DisplayName = "Trail Color"))
+		FLinearColor TrailColor;
+
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
+	UFUNCTION(BlueprintNativeEvent, Category = "References")
+		void GetReferences(bool & Success);
+
+private:
+
+	bool bOwnerCycleTurn = false;
+	void OnOwnerCycleTurn(class ATronCycle * cycle, bool bRight);
+	void OnOwnerCycleCrash(class ATronCycle * cycle);
+
 
 
 };
