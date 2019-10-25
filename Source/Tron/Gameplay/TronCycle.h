@@ -26,6 +26,8 @@ protected:
 
 	UFUNCTION(BlueprintNativeEvent, Category = "References")
 		void GetReferences(bool & Success);
+	UFUNCTION(BlueprintNativeEvent, Category = "Game", meta = (DisplayName = "On Player ID Recieved"))
+		void OnPlayerIdRecieved(int32 playerId);
 
 public:	
 
@@ -47,6 +49,10 @@ public:
 		void ClearTrails();
 	UFUNCTION(BlueprintCallable, Category = "Game", meta = (DisplayName = "Cycle Crash Check"))
 		void CycleCrashCheck(AActor * actor);
+	UFUNCTION(BlueprintCallable, Category = "Game", meta = (DisplayName = "Cycle Overlap"))
+		void CycleOverlap(AActor * actor);
+	UFUNCTION(BlueprintCallable, Category = "Game", meta = (DisplayName = "Cycle Hit"))
+		void CycleHit(AActor * actor);
 	UFUNCTION(BlueprintPure, Category = "Movement", meta = (DisplayName = "Get Trail Source Point"))
 		void GetTrailSourcePoint(FVector & point);
 

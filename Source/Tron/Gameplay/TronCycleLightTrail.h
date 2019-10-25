@@ -27,7 +27,7 @@ public:
 	UPROPERTY(BlueprintReadOnly, Category = "References", meta = (DisplayName = "Game State"))
 		class ATronGameState * GameState;
 	UPROPERTY(BlueprintReadOnly, Category = "Game", meta = (DisplayName = "Trail Color"))
-		FLinearColor TrailColor;
+		FLinearColor TrailColor = FColor::MakeRandomColor();;
 
 protected:
 	// Called when the game starts or when spawned
@@ -38,9 +38,13 @@ protected:
 
 private:
 
+	UFUNCTION()
+		void OnOwnerCycleTurn(class ATronCycle * cycle, bool bRight);
+	UFUNCTION()
+		void OnOwnerCycleCrash(class ATronCycle * cycle);
+
 	bool bOwnerCycleTurn = false;
-	void OnOwnerCycleTurn(class ATronCycle * cycle, bool bRight);
-	void OnOwnerCycleCrash(class ATronCycle * cycle);
+
 
 
 

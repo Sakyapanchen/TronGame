@@ -17,6 +17,8 @@ class TRON_API ATronGameMode : public AGameMode
 
 public:
 
+	virtual void HandleStartingNewPlayer_Implementation(APlayerController* NewPlayer) override;
+
 	UFUNCTION(BlueprintCallable, Category = "Game")
 		void SetNumPlayersToStartMatch(int32 num);
 
@@ -27,7 +29,7 @@ public:
 	UPROPERTY(BlueprintReadOnly, Category = "Game")
 		bool bReadyToStartMatch;
 
-	virtual void HandleStartingNewPlayer_Implementation(APlayerController* NewPlayer) override;
+
 
 protected:
 

@@ -11,8 +11,10 @@
 void ATronGameMode::HandleStartingNewPlayer_Implementation(APlayerController* NewPlayer)
 {
 	int32 playerIndex = GetNumPlayers() - 1;
-	NewPlayer->StartSpot = FindPlayerStart(NewPlayer, FString::FromInt(playerIndex));
+	FString playerId = FString::FromInt(playerIndex);
+	NewPlayer->StartSpot = FindPlayerStart(NewPlayer, playerId);
 	NewPlayer->PlayerState->PlayerId = playerIndex;
+	NewPlayer->PlayerState->SetPlayerName("Player" + playerId);
 #if WITH_EDITOR
 	SetNumPlayersToStartMatch(GetNumPlayers());
 #endif
@@ -25,7 +27,6 @@ void ATronGameMode::HandleStartingNewPlayer_Implementation(APlayerController* Ne
 	if (NumPlayersToStartMatch  >= GetNumPlayers())
 		this->GetWorld()->GetTimerManager().SetTimer(StartCountdown, this, &ATronGameMode::OnMatchStartTimeoutEnded, MatchStartTimeout, false);
 }
-
 
 void ATronGameMode::SetNumPlayersToStartMatch(int32 num)
 {

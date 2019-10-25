@@ -37,7 +37,9 @@ void ATronCycleLightTrail::BeginPlay()
 
 void ATronCycleLightTrail::GetReferences_Implementation(bool & Success)
 {
-	GameState = Cast<ATronGameState>(UGameplayStatics::GetGameState(this));
+	AGameStateBase * gameState = UGameplayStatics::GetGameState(this);
+	if (gameState)
+		GameState = Cast<ATronGameState>(gameState);
 	if (GetOwner())
 		OwnerCycle = Cast<ATronCycle>(GetOwner());
 }
@@ -47,7 +49,7 @@ void ATronCycleLightTrail::GetReferences_Implementation(bool & Success)
 void ATronCycleLightTrail::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	if (bOwnerCycleTurn)
+	if (bOwnerCycleTurn && bIsActive)
 		SetActive(false);
 }
 

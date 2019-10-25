@@ -39,6 +39,10 @@ void ATronCycle::GetReferences_Implementation(bool & Success)
 
 }
 
+void ATronCycle::OnPlayerIdRecieved_Implementation(int32 playerId)
+{
+}
+
 // Called every frame
 void ATronCycle::Tick(float DeltaTime)
 {
@@ -105,6 +109,14 @@ void ATronCycle::CycleCrashCheck(AActor * actor)
 {
 }
 
+void ATronCycle::CycleOverlap(AActor * actor)
+{
+}
+
+void ATronCycle::CycleHit(AActor * actor)
+{
+}
+
 void ATronCycle::GetTrailSourcePoint(FVector & point)
 {
 	point = (GetActorForwardVector() * -1 * SphereComponent->GetScaledSphereRadius()) + GetActorLocation();
@@ -134,6 +146,7 @@ void ATronCycle::NetMulticast_EnableMovement_Implementation(bool bEnabled)
 void ATronCycle::NetMulticast_PlayerIdRecieved_Implementation(int32 inPlayerId)
 {
 	PlayerID = inPlayerId;
+	OnPlayerIdRecieved(PlayerID);
 	ENetMode netMode = this->GetWorld()->GetNetMode();
 	if (netMode != NM_Client)
 		EnableMovement(true);
