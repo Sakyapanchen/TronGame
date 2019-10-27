@@ -36,12 +36,19 @@ protected:
 	UFUNCTION(BlueprintNativeEvent, Category = "References")
 		void GetReferences(bool & Success);
 
+	UFUNCTION(BlueprintNativeEvent, Category = "Game", meta = (DisplayName = "Update Procedural Mesh"))
+		void UpdateProceduralMesh(bool & bResult);
+	UFUNCTION(BlueprintNativeEvent, Category = "Game", meta = (DisplayName = "Create Procedural Mesh"))
+		void CreateProceduralMesh(bool & bResult);
+
 private:
 
 	UFUNCTION()
 		void OnOwnerCycleTurn(class ATronCycle * cycle, bool bRight);
 	UFUNCTION()
 		void OnOwnerCycleCrash(class ATronCycle * cycle);
+
+
 
 	bool bOwnerCycleTurn = false;
 

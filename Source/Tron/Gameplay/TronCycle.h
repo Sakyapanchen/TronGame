@@ -47,8 +47,6 @@ public:
 		void GetCycleTrails(TArray<class ATronCycleLightTrail *> & trails);
 	UFUNCTION(BlueprintCallable, Category = "Game", meta = (DisplayName = "Clear Trails"))
 		void ClearTrails();
-	UFUNCTION(BlueprintCallable, Category = "Game", meta = (DisplayName = "Cycle Crash Check"))
-		void CycleCrashCheck(AActor * actor);
 	UFUNCTION(BlueprintCallable, Category = "Game", meta = (DisplayName = "Cycle Overlap"))
 		void CycleOverlap(AActor * actor);
 	UFUNCTION(BlueprintCallable, Category = "Game", meta = (DisplayName = "Cycle Hit"))
@@ -70,6 +68,11 @@ public:
 		bool bIsCrashed = false;
 	UPROPERTY(BlueprintReadOnly, Category = "Game", meta = (DisplayName = "Player ID"))
 		int32 PlayerID = -1;
+
+	UPROPERTY(BlueprintReadOnly, Category = "References", meta = (DisplayName = "Game Mode"))
+		class ATronGameMode * GameMode;
+	UPROPERTY(BlueprintReadOnly, Category = "References", meta = (DisplayName = "Game State"))
+		class ATronGameState * GameState;
 
 	UPROPERTY(BlueprintAssignable, Category = "Game", meta = (DisplayName = "On Cycle Crash"))
 		FCycleCrashResult OnCycleCrash;
@@ -98,6 +101,7 @@ private:
 
 	void SpawnLightTrail();
 	void CycleMovement();
+	void CycleCrash();
 	void TryGetPlayerId();
 	void TurnCycle(bool bRight, FVector turnPoint);
 

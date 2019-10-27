@@ -5,6 +5,8 @@
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/PlayerState.h"
 #include "TronCycleLightTrail.h"
+#include "System/TronGameMode.h"
+#include "System/TronGameState.h"
 #include "Engine/EngineTypes.h"
 
 ATronCycle::ATronCycle(const FObjectInitializer& ObjectInitializer): Super(ObjectInitializer)
@@ -36,7 +38,10 @@ void ATronCycle::EndPlay(const EEndPlayReason::Type EndPlayReason)
 
 void ATronCycle::GetReferences_Implementation(bool & Success)
 {
-
+	if (UGameplayStatics::GetGameMode(this))
+		GameMode = Cast<ATronGameMode>(UGameplayStatics::GetGameMode(this));
+	if (UGameplayStatics::GetGameState(this))
+		GameState = Cast<ATronGameState>(UGameplayStatics::GetGameState(this));
 }
 
 void ATronCycle::OnPlayerIdRecieved_Implementation(int32 playerId)
@@ -105,16 +110,41 @@ void ATronCycle::ClearTrails()
 	CycleTrails.Empty();
 }
 
-void ATronCycle::CycleCrashCheck(AActor * actor)
-{
-}
 
 void ATronCycle::CycleOverlap(AActor * actor)
 {
+	int32 trailsNum = CycleTrails.Num();
+	if (trailsNum == 0)
+		return;
+	if (trailsNum <= 3)
+	{
+		if (!CycleTrails.Contains(actor))
+		{
+			CycleCrash();
+			return;
+		}
+		return;
+	}
+	else
+	{
+		if (actor == CycleTrails[trailsNum - 2] || actor == CycleTrails[trailsNum - 1])
+			return;
+		CycleCrash();
+	}
 }
 
 void ATronCycle::CycleHit(AActor * actor)
 {
+	CycleCrash();
+}
+
+void ATronCycle::CycleCrash()
+{
+	bIsCrashed = true;
+	EnableMovement(false);
+	OnCycleCrash.Broadcast(this);
+	if (GameMode)
+		GameMode->CycleCrashMessage(this);
 }
 
 void ATronCycle::GetTrailSourcePoint(FVector & point)

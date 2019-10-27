@@ -3,3 +3,7 @@
 
 #include "TronGameInstance.h"
 
+void UTronGameInstance::SetNumPlayersToStartMatch(int32 num)
+{
+	NumPlayersToStartMatch = num;
+}

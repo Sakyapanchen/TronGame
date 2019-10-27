@@ -19,17 +19,32 @@ public:
 
 	virtual void HandleStartingNewPlayer_Implementation(APlayerController* NewPlayer) override;
 
-	UFUNCTION(BlueprintCallable, Category = "Game")
-		void SetNumPlayersToStartMatch(int32 num);
+	virtual void StartMatch() override;
 
+	virtual bool PlayerCanRestart_Implementation(APlayerController* Player) override;
+
+	UFUNCTION(BlueprintCallable, Category = "Game")
+		void CycleCrashMessage(ATronCycle * cycle);
+	UFUNCTION(BlueprintCallable, Category = "Game")
+		void StartNewRound();
+
+
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Settings", meta = (DisplayName = "Match Map Name"))
+		FString MatchMapName = "GameMap";
 	UPROPERTY(BlueprintReadOnly, Category = "Game")
 		int32 NumPlayersToStartMatch = -1;
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Settings", meta = (DisplayName = "Match Start Timeout", ClampMin = "0", UIMin = "0"))
-		float MatchStartTimeout = 2;
+	UPROPERTY(BlueprintReadOnly, meta = (DisplayName = "Score To Win"))
+		int32 ScoreToWin = -1;
+	UPROPERTY(BlueprintReadOnly, meta = (DisplayName = "Match Start Timeout"))
+		float MatchStartTimeout = 0;
+	UPROPERTY(BlueprintReadOnly, meta = (DisplayName = "Match End Timeout"))
+		float MatchEndTimeout = 0;
+	UPROPERTY(BlueprintReadOnly, meta = (DisplayName = "After Round Timeout"))
+		float AfterRoundTimeout = 0;
 	UPROPERTY(BlueprintReadOnly, Category = "Game")
 		bool bReadyToStartMatch;
-
-
+	UPROPERTY(BlueprintReadOnly, Category = "Game")
+		int32 CurrentRound = -1;
 
 protected:
 
@@ -42,6 +57,15 @@ private:
 
 	void CheckWinConditions();
 	void OnMatchStartTimeoutEnded();
-	TArray<class AActor *> PlayerStarts;	
+	void OnMatchEndTimeoutEnded();
+	void OnRoundTimeoutEnded();
+	void RefreshPlayers();
+	void FetchGameStateData();
+	class ATronGameState * GameState;
+	class UTronGameInstance * GameInstance;
+	TArray<class AActor *> PlayerStarts;
 	FTimerHandle StartCountdown;
+	FTimerHandle AfterReoundCountdown;
+	FTimerHandle EndCountdown;
+	int32 CrashedCyclesNum = 0;
 };

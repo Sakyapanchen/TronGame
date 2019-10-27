@@ -32,6 +32,15 @@ void ATronCycleLightTrail::BeginPlay()
 				TrailColor = Colors[playerID];
 		}
 	}
+	CreateProceduralMesh(success);
+}
+
+void ATronCycleLightTrail::UpdateProceduralMesh_Implementation(bool & bResult)
+{
+}
+
+void ATronCycleLightTrail::CreateProceduralMesh_Implementation(bool & bResult)
+{
 }
 
 
@@ -45,9 +54,11 @@ void ATronCycleLightTrail::GetReferences_Implementation(bool & Success)
 }
 
 
-// Called every frame
 void ATronCycleLightTrail::Tick(float DeltaTime)
 {
+	bool success;
+	if (bIsActive)
+		UpdateProceduralMesh(success);
 	Super::Tick(DeltaTime);
 	if (bOwnerCycleTurn && bIsActive)
 		SetActive(false);
@@ -65,5 +76,7 @@ void ATronCycleLightTrail::OnOwnerCycleTurn(ATronCycle * cycle, bool bRight)
 
 void ATronCycleLightTrail::OnOwnerCycleCrash(ATronCycle * cycle)
 {
+	SetActive(false);
 }
+
 
